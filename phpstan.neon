@@ -1,0 +1,15 @@
+includes:
+    - vendor/nunomaduro/larastan/extension.neon
+
+parameters:
+    paths:
+        - app
+        - config
+        - database
+    level: 6
+
+    # Tell Larastan it's a Laravel project
+    bootstrapFiles:
+        - vendor/nunomaduro/larastan/bootstrap.php
+
+#    checkMissingIterableValueType: false
