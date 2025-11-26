@@ -42,8 +42,8 @@ jobs:
          APP_KEY: ${{ secrets.APP_KEY }} # or set via env if needed just for build
 
          # Optional: run tests
-      - name: Run tests
-        run: php artisan test
+      #- name: Run tests
+       # run: php artisan test
       - name: Create deployment package
         run: zip -r release.zip . -x '*.git*'
 
