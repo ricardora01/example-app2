@@ -1,7 +1,5 @@
-# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-# More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy PHP app to Azure Web App - example-app2
+name: Build and deploy PHP app to Azure Web App - Web-App02
 
 on:
   push:
@@ -21,7 +19,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.3'
+          php-version: '8.4'
 
       - name: Check if composer.json exists
         id: check_files
@@ -32,6 +30,23 @@ jobs:
       - name: Run composer install if composer.json exists
         if: steps.check_files.outputs.files_exists == 'true'
         run: composer validate --no-check-publish && composer install --prefer-dist --no-progress
+
+        # Optional: run Laravel optimizations
+      - name: Laravel optimizations
+        run: |
+          php artisan config:cache
+          php artisan route:cache
+          php artisan view:cache
+        env:
+          APP_ENV: production
+          APP_DEBUG: false
+          APP_KEY: ${{ secrets.APP_KEY }} # or set via env if needed just for build
+
+          # Optional: run tests
+      #- name: Run tests
+      # run: php artisan test
+      - name: Create deployment package
+        run: zip -r release.zip . -x '*.git*'
 
 
       - name: Upload artifact for deployment job
@@ -64,6 +79,11 @@ jobs:
         uses: azure/webapps-deploy@v3
         id: deploy-to-webapp
         with:
-          app-name: 'example-app2'
+          app-name: 'Web-App02'
           slot-name: 'Production'
           package: .
+
+
+
+
+
