@@ -33,6 +33,10 @@ jobs:
       - name: Install dependencies
         run: composer install --no-progress --prefer-dist --no-interaction
 
+      # ---------- Run Tests ----------
+      - name: Run tests
+        run: php artisan test
+
       # ---------- PHPStan / Larastan ----------
       - name: Run PHPStan (Larastan)
         run: |
