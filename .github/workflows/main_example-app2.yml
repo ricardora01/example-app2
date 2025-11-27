@@ -33,6 +33,14 @@ jobs:
         if: steps.check_files.outputs.files_exists == 'true'
         run: composer validate --no-check-publish && composer install --prefer-dist --no-progress
 
+      - name: Install dependencies
+        run: composer install --no-progress --prefer-dist --no-interaction
+
+      - name: Set up the database
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+          php artisan migrate
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
@@ -52,7 +60,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: php-app
-      
+
       - name: Login to Azure
         uses: azure/login@v2
         with:
@@ -67,4 +75,3 @@ jobs:
           app-name: 'example-app2'
           slot-name: 'Production'
           package: .
-          
